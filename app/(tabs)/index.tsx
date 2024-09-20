@@ -1,70 +1,113 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { TabBarIcon } from "@/components/navigation/TabBarIcon";
+import { Colors } from "@/constants/Colors";
+import { useHeaderHeight } from "@react-navigation/elements";
+import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { Link, Stack } from "expo-router";
+import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput } from "react-native";
+import CategoryButtons from "@/components/categoryButtons";
+import { useState } from "react";
+import Listings from "@/components/listings";
+import listingData from '@/data/destinations.json';
+import groupData from '@/data/groups.json';
+import GroupListings from "@/components/groupListings";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function Page() {
+  const headerHeight = useHeaderHeight();
+  const [category, setCategory] = useState("All");
 
-export default function HomeScreen() {
+  const onCatChanged = (category: string) => {
+    console.log("Categpry: ", category);
+    setCategory(category);
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <>
+      <Stack.Screen options={{
+        headerTransparent: true,
+        headerTitle: '',
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => { }} style={{ marginLeft: 20, }} >
+            <Image source={{ uri: 'https://xsgames.co/randomusers/avatar.php?g=female' }} style={{ width: 40, height: 40, borderRadius: 10 }} />
+          </TouchableOpacity>
+        ),
+        headerRight: () => (
+          <TouchableOpacity style={{ marginRight: 20, backgroundColor: Colors.white, padding: 10, borderRadius: 10, shadowColor: "#171717", shadowOffset: { width: 2, height: 4 }, shadowOpacity: 0.2, shadowRadius: 3, elevation: 10 }} >
+            <Ionicons size={20} color={Colors.black} name="notifications" />
+          </TouchableOpacity>
+        )
+      }} />
+      <View style={[styles.container, { paddingTop: headerHeight }]} >
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text style={styles.headingTxt}>Explore The Beautiful World!</Text>
+
+          <View style={styles.searchSectionWrapper}>
+            <View style={styles.searchBar}>
+              <Ionicons
+                name="search"
+                size={18}
+                style={{ 
+                  marginRight: 5,
+                  paddingTop: 18,
+                  paddingLeft: 5, 
+                  width: 30,
+
+                }}
+                color={Colors.black}
+              />
+              <TextInput style={{
+                flex: 1
+              }} placeholder="Search..." />
+            </View>
+            <TouchableOpacity onPress={() => { }} style={styles.filterBtn}>
+              <Ionicons name="options" size={28} color={Colors.white} />
+            </TouchableOpacity>
+          </View>
+
+          <CategoryButtons
+          onCagtegoryChanged={onCatChanged} 
+          />
+
+          <Listings listings={listingData} category={category} />
+
+          <GroupListings listings={groupData} />
+        </ScrollView>
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    backgroundColor: Colors.bgColor,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  headingTxt: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: Colors.black,
+    marginTop: 10,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  searchSectionWrapper: {
+    flexDirection: "row",
+    marginVertical: 20,
   },
-});
+  searchBar: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    // padding: 16,
+    shadowColor: "#171717", 
+    shadowOffset: { width: 2, height: 4 }, 
+    // shadowOpacity: 0.2, 
+    // shadowRadius: 3,
+    elevation: 10,
+  },
+  filterBtn: {
+    backgroundColor: Colors.primaryColor,
+    padding: 12,
+    borderRadius: 10,
+    marginLeft: 20,
+  },
+})

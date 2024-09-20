@@ -1,37 +1,70 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import { Colors } from "@/constants/Colors";
+import { useRouter, Stack } from "expo-router";
+import { TouchableOpacity, View } from "react-native";
+import {
+  Feather,
+  FontAwesome,
+  FontAwesome5,
+  Ionicons,
+} from "@expo/vector-icons";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
+  const router = useRouter();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <Stack screenOptions={{ headerShown: false }} >
+
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="login" options={{ title: 'Login' }} />
+      <Stack.Screen name="signup" options={{ title: 'Signup' }} />
+      <Stack.Screen name="listing/[id]"
+        options={{
+          title: 'Listing',
+          headerTransparent: true,
+          headerShown: true,
+          headerTitle: "",
+          headerLeft: () => (
+            <TouchableOpacity
+              onPress={() => router.back()}
+              style={{
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                borderRadius: 10,
+                padding: 4,
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: Colors.white,
+                  padding: 6,
+                  borderRadius: 10,
+                }}
+              >
+                <Feather name="arrow-left" size={20} />
+              </View>
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity
+              onPress={() => { }}
+              style={{
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                borderRadius: 10,
+                padding: 4,
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: Colors.white,
+                  padding: 6,
+                  borderRadius: 10,
+                }}
+              >
+                <Ionicons name="bookmark-outline" size={20} />
+              </View>
+            </TouchableOpacity>
+          ),
+        }}
+      />
+    </Stack>
   );
 }
