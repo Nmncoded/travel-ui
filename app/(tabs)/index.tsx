@@ -2,10 +2,10 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import { Link, Stack } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView, TextInput } from "react-native";
 import CategoryButtons from "@/components/categoryButtons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Listings from "@/components/listings";
 import listingData from '@/data/destinations.json';
 import groupData from '@/data/groups.json';
@@ -14,11 +14,19 @@ import GroupListings from "@/components/groupListings";
 export default function Page() {
   const headerHeight = useHeaderHeight();
   const [category, setCategory] = useState("All");
+  const isLoggedin = true;
 
   const onCatChanged = (category: string) => {
     console.log("Categpry: ", category);
     setCategory(category);
   };
+
+  const router = useRouter();
+
+
+  if(!isLoggedin){
+    router.replace("/login");
+  }
 
   return (
     <>

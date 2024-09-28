@@ -7,15 +7,41 @@ import {
   FontAwesome5,
   Ionicons,
 } from "@expo/vector-icons";
+import { useEffect } from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
 
-export default function RootLayout() {
+
+export default function App() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/login"); // Ensures navigation starts at the login screen
+  }, []);
+
+  return (
+    <SafeAreaProvider style={{ flex: 1, backgroundColor: Colors.white }} >
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <RootNavigation />
+    </GestureHandlerRootView>
+  </SafeAreaProvider>
+  );
+}
+
+function RootNavigation() {
   const router = useRouter();
 
   return (
-    <Stack screenOptions={{ headerShown: false }} >
+    <Stack initialRouteName="login" screenOptions={{ headerShown: false }} >
 
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="login" options={{ title: 'Login' }} />
+      <Stack.Screen name="login" options={{ 
+        title: 'Login', 
+        headerTransparent: true,
+        headerShown: false,
+        headerTitle: "",
+        }} />
       <Stack.Screen name="signup" options={{ title: 'Signup' }} />
       <Stack.Screen name="listing/[id]"
         options={{

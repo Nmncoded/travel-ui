@@ -11,6 +11,9 @@ export const Colors = {
   bgColor: '#f4f4f4',
   black: '#27283a',
   white: '#fff',
+	textMuted: '#9ca3af',
+	text: '#000',
+  secondaryTextColor : '#fff',
   inactiveTintColor : '#999',
   light: {
     text: '#11181C',
@@ -29,3 +32,16 @@ export const Colors = {
     tabIconSelected: tintColorDark,
   },
 };
+
+export const fontSize = {
+	xs: 12,
+	sm: 16,
+	base: 18,
+	lg: 22,
+  xl : 24,
+}
+
+export const screenPadding = {
+	horizontal: 30,
+  vertical: 30,
+}
