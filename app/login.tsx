@@ -16,6 +16,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { defaultStyles } from "@/styles";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useRouter } from "expo-router";
+import Animated, { BounceInDown, BounceInLeft, BounceInRight, BounceInUp, FadeIn, FadeInDown, FadeInUp, LightSpeedInRight, SlideInDown } from "react-native-reanimated";
 
 const { width, height } = Dimensions.get("window");
 
@@ -37,17 +38,22 @@ const LoginScreen = () => {
   };
 
   return (
-    <View
+    <Animated.View
       style={[defaultStyles.container, styles.loginContainer]}
       // behavior="padding"
       // keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
     >
-      <Image
+      <Animated.Image
         style={[styles.bgImage]}
+        entering={SlideInDown.duration(400)}
         source={require("@/assets/images/login_bg_image.jpg")}
       />
 
-      <View style={[styles.inputContainer]}>
+      <Animated.View entering={BounceInUp.duration(2000).springify().delay(800)} >
+        <Text style={[styles.header]}  >Login</Text>
+      </Animated.View>
+
+      <Animated.View entering={BounceInLeft.duration(2000).springify().delay(800)} style={[styles.inputContainer]}>
         <TextInput
           style={[styles.inputFieldContainer]}
           autoCorrect={false}
@@ -57,8 +63,8 @@ const LoginScreen = () => {
           placeholder="Email"
           onChangeText={(text) => onChangeText(text, "email")}
         />
-      </View>
-      <View style={[styles.inputContainer]}>
+      </Animated.View>
+      <Animated.View entering={BounceInRight.duration(2000).springify().delay(800)} style={[styles.inputContainer]}>
         <TextInput
           style={[styles.inputFieldContainer]}
           autoCorrect={false}
@@ -68,18 +74,32 @@ const LoginScreen = () => {
           onChangeText={(text) => onChangeText(text, "password")}
           secureTextEntry
         />
-      </View>
+      </Animated.View>
       {/* <Button title="Login" onPress={onLogin} /> */}
+      <Animated.View entering={BounceInDown.duration(2000).springify().delay(800)} style={{width:"100%"}} >
       <Pressable onPress={onLogin} style={[styles.button,{width: '50%', alignSelf : 'center'}]}  >
-        <Text>Login</Text>
+        <Animated.Text >Login</Animated.Text>
       </Pressable>
-    </View>
+      </Animated.View>
+      <Animated.View style={{flexDirection:'row',alignItems: 'center', justifyContent: 'center', marginTop: 20}} entering={BounceInDown.duration(1500).springify().delay(900)}  >
+        <Animated.Text style={{ color: 'white', fontSize: 16}} >Don't have an account?</Animated.Text>
+        <Pressable onPress={() => router.push("/signup")}   >
+        <Animated.Text style={{ color: 'blue', fontSize: 16, marginLeft: 5, textDecorationLine: 'underline', fontWeight: 'bold'}} > Signup</Animated.Text>
+      </Pressable>
+      </Animated.View>
+    </Animated.View>
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
+  header : {
+    fontSize: 45,
+    fontWeight: 700,
+    color: '#fff',
+    marginBottom: 15
+  },
   loginContainer: {
     // borderColor: "red",
     // borderWidth: 2,
